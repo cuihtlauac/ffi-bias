@@ -15,7 +15,7 @@ from concurrent.futures import ThreadPoolExecutor, as_completed
 import yaml
 
 from prompts import plan_cells, expand_cell, Cell
-from api_client import call_model
+from api_client import call_model_meta
 
 
 def load_config(path):
@@ -72,12 +72,14 @@ def run(cfg, plan, dry_run=False):
 
     def work(j):
         try:
-            txt = call_model(model=j["model"], user=j["prompt"],
-                             temperature=temp, max_tokens=maxtok)
+            txt, meta = call_model_meta(model=j["model"], user=j["prompt"],
+                                        temperature=temp, max_tokens=maxtok)
             j["completion"] = txt
+            j["provenance"] = meta   # provider, resolved model, endpoint, exact params sent
             j["error"] = None
         except Exception as e:  # noqa: BLE001 — record and continue
             j["completion"] = ""
+            j["provenance"] = None
             j["error"] = repr(e)
         with open(os.path.join(raw_dir, j["job_id"] + ".json"), "w") as f:
             json.dump(j, f)
