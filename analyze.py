@@ -17,13 +17,15 @@ Usage:
   python analyze.py --config config.yaml
 """
 
-import os, argparse
+import os, sys, argparse
 import numpy as np
 import pandas as pd
 import yaml
 import statsmodels.api as sm
 import statsmodels.formula.api as smf
 from statsmodels.stats.proportion import proportion_confint
+
+_HERE = os.path.dirname(os.path.abspath(__file__))
 
 
 def load_config(path):
@@ -96,10 +98,23 @@ def cohen_kappa(a, b):
     return kappa, n
 
 
-def main(cfg):
-    out = cfg["paths"]["analysis_dir"]
+def main(cfg, run_id=None):
+    # --run-id => read scored.csv from and write analysis into the immutable
+    # lab/results/<run-id>/ that score.py --run-id produced; else the out/ scratch.
+    if run_id:
+        run_dir = os.path.join(_HERE, "lab", "results", run_id)
+        scored_csv = os.path.join(run_dir, "scored.csv")
+        out = os.path.join(run_dir, "analysis")
+        if not os.path.exists(scored_csv):
+            sys.exit(f"{scored_csv} not found — run `score.py --run-id {run_id}` first.")
+        if os.path.exists(os.path.join(out, "summary.txt")):
+            sys.exit(f"refusing to overwrite analysis in {out} — lab/results entries are "
+                     f"append-only. Use a fresh --run-id.")
+    else:
+        out = cfg["paths"]["analysis_dir"]
+        scored_csv = cfg["paths"]["scored_csv"]
     os.makedirs(out, exist_ok=True)
-    df = pd.read_csv(cfg["paths"]["scored_csv"])
+    df = pd.read_csv(scored_csv)
 
     cues = ["perf", "domain", "polars", "recognition", "placebo"]
     oc = df[df.lang == "ocaml"].copy()
@@ -189,5 +204,8 @@ def main(cfg):
 if __name__ == "__main__":
     ap = argparse.ArgumentParser()
     ap.add_argument("--config", default="config.yaml")
+    ap.add_argument("--run-id", default=None,
+                    help="read/write lab/results/<run-id>/ (the dir score.py --run-id "
+                         "produced) instead of out/.")
     args = ap.parse_args()
-    main(load_config(args.config))
+    main(load_config(args.config), run_id=args.run_id)
