@@ -81,11 +81,19 @@ def score_one(rec, cfg):
 
     # LLM judge (all non-ocaml; and ocaml too if configured, for calibration)
     if lang != "ocaml" or cfg["scoring"].get("judge_on_ocaml_too"):
-        d = judge_api(code, lang, model=cfg["scoring"]["judge_model"])
+        try:
+            d = judge_api(code, lang, model=cfg["scoring"]["judge_model"])
+        except Exception as e:  # a transient judge API error must not nuke the whole run
+            d = dict(pattern="?", closure_capable=None, confidence=0.0,
+                     why=f"judge error: {repr(e)[:80]}")
         row.update(judge_to_row(d))
         if lang != "ocaml":
-            row["closure_capable"] = row["judge_closure_capable"]
-            row["needs_manual_review"] = int(d.get("confidence", 0) < 0.5)
+            # closure_capable is None when the judge errored/was unparseable, so the
+            # row is excluded from rates (notna filter) and flagged for review rather
+            # than silently scored 0.
+            judge_failed = d.get("closure_capable") is None
+            row["closure_capable"] = None if judge_failed else row["judge_closure_capable"]
+            row["needs_manual_review"] = int(judge_failed or d.get("confidence", 0) < 0.5)
 
     return row
 

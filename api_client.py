@@ -118,7 +118,12 @@ def _post_json(url, headers, payload, retries):
                 # A per-DAY free-tier exhaustion won't clear by retrying — fail fast so
                 # the run ends quickly (and resumes after reset) instead of grinding the
                 # full retry budget on every remaining job.
-                if e.code == 429 and "PerDay" in body:
+                # Daily-quota exhaustion won't clear by retrying. Match common phrasings
+                # across providers (Gemini "...PerDay...", others "per day"/"daily").
+                bl = body.lower()
+                if e.code == 429 and any(s in bl for s in
+                                         ("perday", "per day", "per-day",
+                                          "requests per day", "tokens per day")):
                     _daily_exhausted[0] = True   # short-circuit the rest of this run
                     raise APIError(f"daily free-tier quota exhausted: {body[:200]}")
                 time.sleep(min(2 ** attempt + 0.5, 60))   # cap raised: clears a full RPM window

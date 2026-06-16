@@ -1,0 +1,46 @@
+# ============================================================================
+#  Closure-bias probe — Cerebras gpt-oss-120b, BALANCED run (clean GLM).
+#  balanced_ocaml (2^5 OCaml cross + Python ceiling + lang sweep) so every main
+#  effect (incl. the placebo null) is cleanly estimable. p0+p1, n=5.
+#  Isolated paths (out_cerebras_balanced/) — does NOT mix with the recorded core pilot.
+#
+#  Multi-day accumulation on the 1M-tokens/day free tier (~1.85M tokens total):
+#    API_MIN_INTERVAL_S=6 python run_experiment.py \
+#        --config config.cerebras-balanced.yaml --plan balanced_ocaml
+#  Re-run daily; the harness recovers throttled jobs and continues until complete.
+#  Then: score.py + analyze.py with --config config.cerebras-balanced.yaml.
+# ============================================================================
+
+models:
+  - cerebras:gpt-oss-120b
+
+api:
+  temperature: 0.7
+  max_tokens: 6000          # gpt-oss reasoning comes before content; < 8192 ctx cap
+
+sampling:
+  n_per_cell: 5             # balanced_ocaml puts each cue level in 16 cells -> ~160/level
+  paraphrases: [p0, p1]     # >=2 needed for a non-degenerate cluster-robust GLM
+  seed: 17
+  max_concurrency: 2
+
+grid:
+  lang:        [ocaml, python, julia, lua, c]
+  perf:        [absent, present]
+  domain:      [numeric, neutral]
+  polars:      [absent, present]
+  recognition: [default, offered]
+  placebo:     [a, b]
+
+default_plan: balanced_ocaml
+
+scoring:
+  ocaml_compiler: ocamlfind
+  ocaml_timeout_s: 20
+  judge_model: cerebras:gpt-oss-120b
+  judge_on_ocaml_too: false   # GLM is compiler-scored; do kappa as a cheap one-off later
+
+paths:
+  raw_dir: ./out_cerebras_balanced/raw
+  scored_csv: ./out_cerebras_balanced/scored.csv
+  analysis_dir: ./out_cerebras_balanced/analysis
