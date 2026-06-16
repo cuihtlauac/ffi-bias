@@ -160,3 +160,16 @@ the entire stats pipeline incl. Wilson CIs / cluster-robust GLM / κ) is verifie
 on fixtures and synthetic hypothesis-consistent data. The compiler battery
 itself requires `ocamlfind` on the scoring machine — it is not exercised in an
 environment without the OCaml toolchain.
+
+## License
+
+Open by default, so the methodology and results can be replicated and reused
+with minimal friction:
+
+- **Code** (everything but `lab/results/`) — MIT (`SPDX-License-Identifier: MIT`),
+  see `LICENSE`.
+- **Experimental data & figures** (recorded runs under `lab/results/`) —
+  Creative Commons Attribution 4.0 (`CC-BY-4.0`). Reuse freely with attribution.
+
+Replace the placeholder copyright holder in `LICENSE` with your name or
+institution before publishing.
