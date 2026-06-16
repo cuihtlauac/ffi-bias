@@ -24,9 +24,10 @@ import os, sys, json, glob, argparse
 from datetime import date
 
 # USD per 1M tokens (input, output). PINNED — see pricing note above.
-# Confirmed 2026-06-16 against the claude-api skill's live source.
+# Confirmed 2026-06-16 against the claude-api skill's canonical pricing page
+# (re-verified same day; all base rates unchanged).
 PRICES_CONFIRMED = "2026-06-16"
-PRICES_SOURCE = "https://platform.claude.com/docs/en/about-claude/models/overview"
+PRICES_SOURCE = "https://platform.claude.com/docs/en/about-claude/pricing"
 PRICES_STALE_DAYS = 60
 PRICES = {
     "claude-opus-4-8": (5.0, 25.0),
