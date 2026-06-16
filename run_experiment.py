@@ -41,7 +41,9 @@ def build_jobs(cfg, plan):
     return jobs
 
 
-def run(cfg, plan, dry_run=False):
+def run(cfg, plan, dry_run=False, n_per_cell=None):
+    if n_per_cell is not None:           # CLI override, e.g. --n-per-cell 1 for a cost pilot
+        cfg["sampling"]["n_per_cell"] = n_per_cell
     raw_dir = cfg["paths"]["raw_dir"]
     os.makedirs(raw_dir, exist_ok=True)
     jobs = build_jobs(cfg, plan)
@@ -102,7 +104,9 @@ if __name__ == "__main__":
     ap.add_argument("--config", default="config.yaml")
     ap.add_argument("--plan", default=None)
     ap.add_argument("--dry-run", action="store_true")
+    ap.add_argument("--n-per-cell", type=int, default=None,
+                    help="override sampling.n_per_cell (use 1 for a cheap cost pilot).")
     args = ap.parse_args()
     cfg = load_config(args.config)
     plan = args.plan or cfg.get("default_plan", "core")
-    run(cfg, plan, dry_run=args.dry_run)
+    run(cfg, plan, dry_run=args.dry_run, n_per_cell=args.n_per_cell)

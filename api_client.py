@@ -91,11 +91,13 @@ def _anthropic(model, user, system, temperature, max_tokens, retries):
     body = _post_json(ANTHROPIC_BASE_URL, headers, payload, retries)
     text = "".join(b.get("text", "") for b in body.get("content", [])
                    if b.get("type") == "text")
+    u = body.get("usage") or {}
     meta = dict(provider="anthropic", model=model,
                 model_served=body.get("model"),   # concrete version behind the alias
                 endpoint=ANTHROPIC_BASE_URL, anthropic_version=ANTHROPIC_VERSION,
                 max_tokens=max_tokens, temperature=temperature,
-                temperature_sent=temperature is not None, has_system=bool(system))
+                temperature_sent=temperature is not None, has_system=bool(system),
+                input_tokens=u.get("input_tokens"), output_tokens=u.get("output_tokens"))
     return text, meta
 
 
@@ -124,11 +126,14 @@ def _gemini(model, user, system, temperature, max_tokens, retries):
     if cands:
         parts = cands[0].get("content", {}).get("parts", [])
         text = "".join(p.get("text", "") for p in parts if "text" in p)
+    u = body.get("usageMetadata") or {}
     meta = dict(provider="google", model=model,
                 model_served=body.get("modelVersion"),   # concrete version Google served
                 endpoint=url, max_tokens=max_tokens, temperature=temperature,
                 temperature_sent=temperature is not None, has_system=bool(system),
-                finish_reason=(cands[0].get("finishReason") if cands else None))
+                finish_reason=(cands[0].get("finishReason") if cands else None),
+                input_tokens=u.get("promptTokenCount"),
+                output_tokens=u.get("candidatesTokenCount"))
     return text, meta
 
 

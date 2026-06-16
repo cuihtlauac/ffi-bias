@@ -13,7 +13,7 @@ produced code + the language, never the prompt that generated it.
 """
 
 import json, re
-from api_client import call_model
+from api_client import call_model_meta
 
 RUBRIC = """You are classifying the DESIGN of a language binding's per-element API.
 You are given a target language and the produced public interface/binding code.
@@ -45,22 +45,27 @@ _JSON = re.compile(r"\{.*\}", re.S)
 
 
 def judge_api(code: str, lang: str, model: str) -> dict:
-    sys = RUBRIC.format(lang=lang)
+    # .replace, not .format: the rubric embeds a literal JSON example whose braces
+    # would make str.format raise (KeyError on '"pattern"'). Only {lang} is a slot.
+    sys = RUBRIC.replace("{lang}", lang)
     user = f"TARGET LANGUAGE: {lang}\n\nPRODUCED INTERFACE/BINDING:\n```\n{code[:12000]}\n```"
     # No temperature: Opus 4.8/4.7 reject it (see api_client.call_model). The judge
     # leans on a tightly-constrained rubric + minified-JSON output for stability
     # rather than temperature=0.
-    txt = call_model(model=model, system=sys, user=user, max_tokens=300)
+    txt, meta = call_model_meta(model=model, system=sys, user=user, max_tokens=300)
+    usage = {"judge_input_tokens": meta.get("input_tokens"),
+             "judge_output_tokens": meta.get("output_tokens")}
     m = _JSON.search(txt)
     if not m:
         return dict(pattern="?", closure_capable=None, confidence=0.0,
-                    why="unparseable", raw=txt[:200])
+                    why="unparseable", raw=txt[:200], **usage)
     try:
         d = json.loads(m.group(0))
     except json.JSONDecodeError:
         return dict(pattern="?", closure_capable=None, confidence=0.0,
-                    why="bad json", raw=txt[:200])
+                    why="bad json", raw=txt[:200], **usage)
     d["closure_capable"] = bool(d.get("closure_capable"))
+    d.update(usage)
     return d
 
 
@@ -70,4 +75,6 @@ def judge_to_row(d: dict) -> dict:
         "judge_closure_capable": int(bool(d.get("closure_capable"))),
         "judge_confidence": float(d.get("confidence") or 0.0),
         "judge_why": d.get("why", "")[:120],
+        "judge_input_tokens": d.get("judge_input_tokens"),
+        "judge_output_tokens": d.get("judge_output_tokens"),
     }
