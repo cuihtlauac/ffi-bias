@@ -46,8 +46,12 @@ To keep a run, record it immutably (see "Recording runs" below).
 All three pipeline scripts take `--config config.yaml` (the default).
 `run_experiment.py` and `score.py` take `--plan`/config-driven options.
 
-There is no test suite, linter, or build step — this is a flat collection of
-plain Python scripts run in pipeline order.
+There is no linter or build step — this is a flat collection of plain Python
+scripts run in pipeline order. The one test is a **zero-token smoke test** of the
+setup (no API key, no network): `opam exec -- python3 lab/smoke_test.py` checks
+prompt expansion, the compiler-battery oracle's pattern discrimination, and
+(if `statsmodels`/`numpy` are installed) `analyze.py` on synthetic data. Exit 0
+= good, 1 = a check failed, 2 = `ocamlfind` missing so the oracle wasn't run.
 
 ## Prerequisites that bite
 
