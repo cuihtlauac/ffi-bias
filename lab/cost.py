@@ -72,7 +72,7 @@ def _avg(vals):
     return (sum(vals) / len(vals)) if vals else 0.0
 
 
-def main(raw_dir, scored_csv, paraphrases, in_price, out_price):
+def main(raw_dir, scored_csv, paraphrases, in_price, out_price, batch=False):
     # --- generation: from out/raw provenance -------------------------------
     gen_in, gen_out, gen_model = [], [], None
     for fp in glob.glob(os.path.join(raw_dir, "*.json")):
@@ -120,18 +120,25 @@ def main(raw_dir, scored_csv, paraphrases, in_price, out_price):
           f"model={gen_model}   price={gp}  ->  ${pilot_gen:.4f}")
     print(f"  judge:      {n_judge} calls   avg in/out = {avg_ji:.0f}/{avg_jo:.0f} tok"
           f"   price={jp}  ->  ${pilot_judge:.4f}")
-    print(f"  pilot total: ${pilot_gen + pilot_judge:.4f}")
+    print(f"  pilot total: ${pilot_gen + pilot_judge:.4f}   (synchronous API, as run)")
 
-    print(f"\nEXTRAPOLATION (avg tokens x full call counts; paraphrases={paraphrases})")
+    # Batch API: flat 50% off input AND output. Applied to the *projection* only —
+    # the pilot above was run synchronously, so its measured cost stays at full rate.
+    mult = 0.5 if batch else 1.0
+    rate_tag = " — Batch API (50% off input+output)" if batch else ""
+    print(f"\nEXTRAPOLATION (avg tokens x full call counts; paraphrases={paraphrases}){rate_tag}")
     print(f"  {'plan':<16}{'gen calls':>10}{'judge calls':>12}{'gen $':>10}{'judge $':>10}{'total $':>10}")
     for plan, cells in PLAN_CELLS.items():
         # full run uses config n_per_cell (default 40); judge once per completion
         for n in (40,):
             gcalls = cells * paraphrases * n
             jcalls = gcalls if n_judge else 0
-            g = dollars(gcalls, avg_gi, avg_go, gp)
-            j = dollars(jcalls, avg_ji, avg_jo, jp)
+            g = dollars(gcalls, avg_gi, avg_go, gp) * mult
+            j = dollars(jcalls, avg_ji, avg_jo, jp) * mult
             print(f"  {plan+' (n=40)':<16}{gcalls:>10}{jcalls:>12}{g:>10.2f}{j:>10.2f}{g+j:>10.2f}")
+    if batch:
+        print("  Batch API: 50% off, asynchronous (results typically <1h, max 24h); "
+              "fine for this non-interactive workload.")
     print(f"\nNote: linear in n_per_cell. {pricing_note()}")
 
 
@@ -142,5 +149,9 @@ if __name__ == "__main__":
     ap.add_argument("--paraphrases", type=int, default=4, help="paraphrases per cell (config).")
     ap.add_argument("--in-price", type=float, default=None, help="override $/1M input tokens.")
     ap.add_argument("--out-price", type=float, default=None, help="override $/1M output tokens.")
+    ap.add_argument("--batch", action="store_true",
+                    help="model the extrapolation at Batch API rates (flat 50%% off "
+                         "input+output; async, non-interactive).")
     args = ap.parse_args()
-    main(args.raw_dir, args.scored, args.paraphrases, args.in_price, args.out_price)
+    main(args.raw_dir, args.scored, args.paraphrases, args.in_price, args.out_price,
+         batch=args.batch)
