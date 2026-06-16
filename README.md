@@ -2,7 +2,26 @@
 
 [![GitHub](https://img.shields.io/badge/GitHub-cuihtlauac%2Fffi--bias-181717?logo=github)](https://github.com/cuihtlauac/ffi-bias)
 
-A test harness for one specific hypothesis:
+Code models tend to carry one language's habits into another. This project tests a
+specific case: asked under performance framing to write OCaml bindings around a C++
+iterator, does the model import **Python's cost model** — where you hand the native
+side a *description* of the work instead of a per-item function — and produce an
+OCaml API that compiles and looks fine but can't actually accept a real closure? We
+measure this objectively by asking the **real OCaml compiler** whether the produced
+interface can express basic per-element tasks (counting while looping, calling other
+libraries, early exit), and we isolate the cause by toggling one framing cue at a
+time across many samples, with a Python positive control and a placebo to keep the
+signal honest. The failure matters precisely because it's **invisible** — the binding
+type-checks — and because existing work catches wrong-language or ugly-but-correct
+output, not valid code that's architecturally crippled by a borrowed assumption.
+
+The rest of this README makes that precise. In one sentence, the hypothesis under
+test:
+
+> Under numeric/performance framing, a code model ports **CPython's per-call
+> cost model** into a target language where it doesn't apply (here OCaml),
+> defaulting to *behavior-as-data* (an ADT/expression tree) or a *fused kernel*
+> instead of letting the host language pass a real per-element **closure**.
 
 > Under numeric/performance framing, a code model ports **CPython's per-call
 > cost model** into a target language where it doesn't apply (here OCaml),
