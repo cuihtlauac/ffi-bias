@@ -24,7 +24,7 @@ and how to interpret results — it is the authoritative design document.
 ```bash
 # Dependencies (Python 3.10+)
 pip install -r requirements.txt        # statsmodels, pyyaml, pandas, numpy
-export ANTHROPIC_API_KEY=...
+export ANTHROPIC_API_KEY=...           # or GEMINI_API_KEY / GOOGLE_API_KEY for Gemini models
 
 # 0. sanity-check the matrix; print one example prompt per distinct cell
 python run_experiment.py --plan core --dry-run
@@ -33,12 +33,15 @@ python run_experiment.py --plan core --dry-run
 #    re-running skips job_ids already on disk)
 python run_experiment.py --plan balanced_ocaml
 
-# 2. score raw completions -> out/scored.csv
+# 2. score raw completions -> out/scored.csv  (the ephemeral scratch path)
 python score.py
 
 # 3. statistics -> out/analysis/{rates,odds_ratios,calibration,summary}.{csv,txt}
 python analyze.py
 ```
+
+`out/` is **scratch** — freely overwritten by each `score.py`/`analyze.py` run.
+To keep a run, record it immutably (see "Recording runs" below).
 
 All three pipeline scripts take `--config config.yaml` (the default).
 `run_experiment.py` and `score.py` take `--plan`/config-driven options.
@@ -55,7 +58,10 @@ plain Python scripts run in pipeline order.
   compiles interfaces and clients, **never links** (so missing C symbols never
   matter). Per global rules, use `opam exec -- ocamlfind ...` if you invoke it
   yourself; never `eval $(opam env)`.
-- **`ANTHROPIC_API_KEY`** for both sampling and the judge.
+- **An API key for the model under test** — `ANTHROPIC_API_KEY` for `claude-*`
+  models, `GEMINI_API_KEY` (or `GOOGLE_API_KEY`) for `gemini-*`. The judge also
+  needs the key for whatever `scoring.judge_model` is. Vendor is inferred from the
+  model id in `api_client.py`.
 
 ## Pipeline architecture (data flows through files, not memory)
 
@@ -78,9 +84,11 @@ out/scored.csv            --analyze.py--------->  out/analysis/*
   not the config.
 - **`run_experiment.py`** — `build_jobs` crosses cells × paraphrases ×
   replicates into jobs keyed by a sha1 `job_id`; runs them concurrently
-  (`ThreadPoolExecutor`, `sampling.max_concurrency`). Errors are recorded into
-  the JSON (`error` field) rather than raised, so a flaky API call doesn't kill
-  the run.
+  (`ThreadPoolExecutor`, `sampling.max_concurrency`). Each raw JSON also stores a
+  `provenance` block (provider, requested + **served** model, endpoint, exact
+  sampling params) so two runs can be proven driven identically. Errors are
+  recorded into the JSON (`error` field) rather than raised, so a flaky API call
+  doesn't kill the run.
 - **`extract.py`** — pulls the codegen artifact from a completion. For OCaml it
   prefers a fenced block that looks like an `.mli` (`val`/`external`/`sig`);
   otherwise the largest fenced block, else whole text.
@@ -105,8 +113,51 @@ out/scored.csv            --analyze.py--------->  out/analysis/*
   SEs by paraphrase) yielding odds ratios, the placebo sanity check, the
   positive-control/language-sweep rates, and Cohen's κ between compiler and
   judge.
-- **`api_client.py`** — minimal stdlib-only (`urllib`) Anthropic Messages
-  wrapper with retry/backoff on 429/5xx. Shared by runner and judge.
+- **`api_client.py`** — multi-vendor completion wrapper, stdlib-only (`urllib`),
+  shared by runner and judge. One stable interface — `call_model(...) -> str` and
+  `call_model_meta(...) -> (str, provenance)` — dispatches on the model id to a
+  thin per-vendor adapter (Anthropic + Google/Gemini). **Callers never branch on
+  vendor**; each adapter owns its own wire format, auth, retry codes, and param
+  quirks (e.g. Anthropic omits `temperature` on Opus 4.8/4.7; Gemini includes it).
+  Add a vendor = one adapter fn + a registry entry. Keys read from the env per
+  vendor; the Gemini key travels in a header, never the URL.
+
+## Recording runs (the `lab/` notebook)
+
+`out/` is scratch; `lab/` is the curated, append-only scientific record. The probe
+is **stochastic** (a rate over sampled completions), so — unlike a deterministic
+benchmark — repeated runs are *data*, not redundant: replication quantifies
+variance, and a run that **fails to replicate** is the most important kind to keep.
+
+Record a keeper run by passing `--run-id` (recording is opt-in — a deliberate
+human act, never automatic):
+
+```bash
+python score.py   --run-id 2026-06-16-balanced_ocaml-<sha> --freeze-raw
+python analyze.py --run-id 2026-06-16-balanced_ocaml-<sha>
+# then fill lab/results/<id>/record.md from lab/results/TEMPLATE.md
+#      and add one row to lab/notebook.md
+```
+
+This produces an **immutable** `lab/results/<run-id>/` containing `scored.csv`,
+`analysis/`, `manifest.json`, and (with `--freeze-raw`) the frozen `raw/`. Both
+scripts **refuse to overwrite** an existing record — re-recording needs a fresh
+`--run-id`.
+
+- **`lab/manifest.py`** — emits the reproducibility manifest (git commit + dirty,
+  config hash, providers, requested + served models, sampling params, seed,
+  OCaml/Python versions, completion counts, `raw_archive_sha256`). `score.py
+  --run-id` writes it automatically; it can also be run standalone on any `out/`.
+  Omits hostname/abs paths by design.
+- **`lab/notebook.md`** — the index (one row per recorded run); analysis lives in
+  the per-run `record.md`, not here.
+- **`--freeze-raw`** makes the record self-contained by copying `out/raw` in; the
+  manifest's `raw_archive_sha256` re-verifies the frozen copy by hash. It git-tracks
+  the raw JSON, so a full run adds tens of MB — fine for keepers, reach for Git LFS
+  (or drop the flag and rely on the recorded hash) if it gets heavy.
+
+The discipline (append-only, human-curated, the stochastic-replication carve-out)
+is enforced by the global `lab-notebook` skill.
 
 ## Things that are easy to get wrong
 
@@ -126,3 +177,8 @@ out/scored.csv            --analyze.py--------->  out/analysis/*
   always filter `.closure_capable.notna()` (the code calls this `usable`).
 - The model string lives in `config.yaml` (`models:` and `scoring.judge_model`).
   Confirm the exact API model id before a real run.
+- **`temperature` on Opus 4.8/4.7 (and Fable 5) returns a 400.** `config.yaml`
+  keeps `api.temperature: null` for that reason — set a float *only* when targeting
+  an older model that accepts it. The Anthropic adapter omits the param when it's
+  `None`; these models stay stochastic across calls, so per-cell sampling diversity
+  is preserved without it. (Gemini accepts `temperature`.)
