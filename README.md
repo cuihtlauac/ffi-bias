@@ -1,5 +1,7 @@
 # closure-bias-probe
 
+[![GitHub](https://img.shields.io/badge/GitHub-cuihtlauac%2Fffi--bias-181717?logo=github)](https://github.com/cuihtlauac/ffi-bias)
+
 A test harness for one specific hypothesis:
 
 > Under numeric/performance framing, a code model ports **CPython's per-call
