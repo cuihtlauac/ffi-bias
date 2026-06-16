@@ -171,5 +171,4 @@ with minimal friction:
 - **Experimental data & figures** (recorded runs under `lab/results/`) —
   Creative Commons Attribution 4.0 (`CC-BY-4.0`). Reuse freely with attribution.
 
-Replace the placeholder copyright holder in `LICENSE` with your name or
-institution before publishing.
+Copyright © 2026 Cuihtlauac ALVARADO (see `LICENSE`).
