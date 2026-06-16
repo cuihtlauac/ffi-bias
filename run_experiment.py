@@ -65,7 +65,7 @@ def run(cfg, plan, dry_run=False):
             print(j["prompt"])
         return
 
-    temp = cfg["api"]["temperature"]
+    temp = cfg["api"].get("temperature")   # None/absent -> omitted (required for Opus 4.8/4.7)
     maxtok = cfg["api"]["max_tokens"]
     todo = [j for j in jobs if not os.path.exists(os.path.join(raw_dir, j["job_id"] + ".json"))]
     print(f"{len(jobs) - len(todo)} already done; running {len(todo)}")

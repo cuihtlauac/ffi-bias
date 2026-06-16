@@ -9,7 +9,11 @@ models:
   - claude-opus-4-8
 
 api:
-  temperature: 0.7          # nonzero: we want a RATE per cell, not one draw
+  # Sampling params are REMOVED on Opus 4.8/4.7 and Fable 5 — a temperature here
+  # would 400 every call. Leave null for those models (they stay stochastic across
+  # calls, so we still get a RATE per cell, not one draw). Set a float ONLY when
+  # targeting an older model (e.g. claude-opus-4-5) that still accepts temperature.
+  temperature: null
   max_tokens: 4000
   # endpoint + key come from env: ANTHROPIC_API_KEY
   base_url: https://api.anthropic.com/v1/messages

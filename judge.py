@@ -47,7 +47,10 @@ _JSON = re.compile(r"\{.*\}", re.S)
 def judge_api(code: str, lang: str, model: str) -> dict:
     sys = RUBRIC.format(lang=lang)
     user = f"TARGET LANGUAGE: {lang}\n\nPRODUCED INTERFACE/BINDING:\n```\n{code[:12000]}\n```"
-    txt = call_model(model=model, system=sys, user=user, temperature=0.0, max_tokens=300)
+    # No temperature: Opus 4.8/4.7 reject it (see api_client.call_model). The judge
+    # leans on a tightly-constrained rubric + minified-JSON output for stability
+    # rather than temperature=0.
+    txt = call_model(model=model, system=sys, user=user, max_tokens=300)
     m = _JSON.search(txt)
     if not m:
         return dict(pattern="?", closure_capable=None, confidence=0.0,

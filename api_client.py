@@ -13,7 +13,7 @@ class APIError(RuntimeError):
     pass
 
 
-def call_model(model: str, user: str, system: str = "", temperature: float = 0.7,
+def call_model(model: str, user: str, system: str = "", temperature: float = None,
                max_tokens: int = 4000, retries: int = 4) -> str:
     key = os.environ.get("ANTHROPIC_API_KEY")
     if not key:
@@ -22,9 +22,15 @@ def call_model(model: str, user: str, system: str = "", temperature: float = 0.7
     payload = {
         "model": model,
         "max_tokens": max_tokens,
-        "temperature": temperature,
         "messages": [{"role": "user", "content": user}],
     }
+    # Sampling params (temperature/top_p/top_k) are REMOVED on Opus 4.8/4.7 and
+    # Fable 5 — sending any of them returns a 400. Only include temperature when
+    # the caller explicitly asks for it (i.e. when targeting an older model that
+    # still accepts it). These models remain stochastic across independent calls,
+    # so per-cell sampling diversity is preserved without it.
+    if temperature is not None:
+        payload["temperature"] = temperature
     if system:
         payload["system"] = system
 
