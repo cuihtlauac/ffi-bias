@@ -1,0 +1,35 @@
+=== CLOSURE-BIAS PROBE: SUMMARY ===
+
+total rows: 120   OCaml usable: 68 (of 70 OCaml; 2 flagged/non-compiling)
+
+
+-- Within-OCaml closure-capable rate by cue (Wilson 95% CI) --
+  perf         = absent   : 0.88  [0.76, 0.94]  (k=43/49)
+  perf         = present  : 0.47  [0.27, 0.68]  (k=9/19)
+  domain       = neutral  : 0.96  [0.86, 0.99]  (k=46/48)
+  domain       = numeric  : 0.30  [0.15, 0.52]  (k=6/20)
+  polars       = absent   : 0.83  [0.70, 0.91]  (k=40/48)
+  polars       = present  : 0.60  [0.39, 0.78]  (k=12/20)
+  recognition  = default  : 0.73  [0.60, 0.83]  (k=43/59)
+  recognition  = offered  : 1.00  [0.70, 1.00]  (k=9/9)
+  placebo      = a        : 0.72  [0.60, 0.82]  (k=42/58)
+  placebo      = b        : 1.00  [0.72, 1.00]  (k=10/10)
+
+-- Positive control & language sweep (closure-capable rate) --
+  lang=c      : 0.70 [0.40,0.89] (k=7/10)
+  lang=ocaml  : 0.76 [0.65,0.85] (k=52/68)
+  lang=lua    : 1.00 [0.72,1.00] (k=10/10)
+  lang=julia  : 0.80 [0.49,0.94] (k=8/10)
+  lang=python : 0.90 [0.70,0.97] (k=18/20) <-- positive control (expect LOW)
+
+-- Judge calibration --
+  Compiler-vs-judge Cohen's kappa on OCaml: nan  (n=0)
+  Interpretation: >=0.8 the cross-language judge is trustworthy; 0.6-0.8 use with caution; <0.6 fall back to human coding.
+  
+
+-- GLM detail --
+GLM skipped: fit failed (ZeroDivisionError('float division by zero')). Expected on a single-paraphrase / unbalanced pilot.
+
+NOTE: for a true mixed-effects logistic (random intercepts for paraphrase AND template/model), fit in R via pymer4:
+  glmer(closure_capable ~ perf+domain+polars+recognition+placebo + (1|paraphrase), family=binomial)
+The cluster-robust GLM above is a pragmatic stand-in.

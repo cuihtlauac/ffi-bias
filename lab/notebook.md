@@ -27,4 +27,4 @@ lives here** — it's an index. See `/home/.../skills/lab-notebook` for the disc
 
 | date | plan | model (served) | n/cell | headline finding | record |
 |------|------|----------------|--------|------------------|--------|
-| _(no runs recorded yet)_ | | | | | |
+| 2026-06-16 | core | cerebras:gpt-oss-120b | 10 (p0) | OCaml closure-capable rate drops 0.96→0.30 (neutral→numeric domain), 0.88→0.47 (perf), 0.83→0.60 (polars), →1.00 (recognition); directionally on-hypothesis but unbalanced pilot, GLM unfittable, cross-lang judge uncalibrated (κ=nan) | [2026-06-16-core-gpt-oss-120b](results/2026-06-16-core-gpt-oss-120b/record.md) |

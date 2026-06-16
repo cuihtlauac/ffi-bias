@@ -1,0 +1,2 @@
+Compiler-vs-judge Cohen's kappa on OCaml: nan  (n=0)
+Interpretation: >=0.8 the cross-language judge is trustworthy; 0.6-0.8 use with caution; <0.6 fall back to human coding.

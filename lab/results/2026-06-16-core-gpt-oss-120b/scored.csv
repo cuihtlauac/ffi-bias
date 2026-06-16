@@ -1,0 +1,128 @@
+job_id,model,cell_id,paraphrase,replicate,lang,perf,domain,polars,recognition,placebo,error,extract_kind,n_blocks,judge_pattern,judge_closure_capable,judge_confidence,judge_why,judge_input_tokens,judge_output_tokens,closure_capable,needs_manual_review,interface_compiles,graded,has_function_param,n_candidate_calls,compiler_error,probe_local_state,probe_extern_effect,probe_exception_exit,probe_runtime_value
+024c50cd44c22086,cerebras:gpt-oss-120b,5656c483b6,p0,3,c,present,numeric,present,default,a,,tagged,3,A,1.0,0.97,User passes a function pointer called per element; can use user_data for state and return non‑zero to stop,2595.0,634.0,1.0,0,,,,,,,,,
+0d65c455189b5095,cerebras:gpt-oss-120b,dbed7a13fe,p0,5,ocaml,absent,numeric,absent,default,a,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+0f603fc2c900fac4,cerebras:gpt-oss-120b,5656c483b6,p0,8,c,present,numeric,present,default,a,,tagged,1,A,1.0,0.99,"callback pointer invoked per element, user code can use userdata and return non‑zero to stop",2746.0,499.0,1.0,0,,,,,,,,,
+1058f4d958d63cb9,cerebras:gpt-oss-120b,92a45f8a3c,p0,6,lua,present,numeric,present,default,a,,tagged,5,A,1.0,0.99,for_each_block takes a Lua callback executed per element,612.0,145.0,1.0,0,,,,,,,,,
+1353f6deb480ae69,cerebras:gpt-oss-120b,dbed7a13fe,p0,3,ocaml,absent,numeric,absent,default,a,,tagged,5,,,,,,,0.0,1,1.0,0.0,1.0,3.0,,0.0,0.0,0.0,0.0
+138ba7fd9ed2a959,cerebras:gpt-oss-120b,a5a6d0dc58,p0,3,ocaml,absent,neutral,absent,offered,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,8.0,,1.0,1.0,1.0,1.0
+162af0eab91bda9b,cerebras:gpt-oss-120b,a5a6d0dc58,p0,7,ocaml,absent,neutral,absent,offered,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+16485fd92be6a99a,cerebras:gpt-oss-120b,dbed7a13fe,p0,4,ocaml,absent,numeric,absent,default,a,,tagged,5,,,,,,,0.0,1,1.0,0.0,1.0,1.0,,0.0,0.0,0.0,0.0
+1bbd458b2e3a350d,cerebras:gpt-oss-120b,5656c483b6,p0,9,c,present,numeric,present,default,a,,tagged,4,A,0.0,0.99,iterator calls user‑supplied function pointer per element,1466.0,279.0,0.0,0,,,,,,,,,
+1be3092cfc5e5ccc,cerebras:gpt-oss-120b,5656c483b6,p0,4,c,present,numeric,present,default,a,,tagged,2,A,1.0,0.97,"Uses C callback function pointer per block; user can manage state via user_data, early abort supported",2683.0,346.0,1.0,0,,,,,,,,,
+1d44820772250cf0,cerebras:gpt-oss-120b,869c4adf71,p0,9,julia,present,numeric,present,default,a,,tagged,7,A,1.0,0.99,User passes a Julia closure invoked per block through C‐function wrapper,1496.0,170.0,1.0,0,,,,,,,,,
+1db248237769e85c,cerebras:gpt-oss-120b,3f7735d62d,p0,9,ocaml,absent,neutral,present,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,6.0,,1.0,1.0,1.0,1.0
+1fe3278402bd3ed3,cerebras:gpt-oss-120b,3a7d1d7270,p0,6,ocaml,absent,neutral,absent,default,b,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+1ff593e13ebd0572,cerebras:gpt-oss-120b,3d50677ecd,p0,6,ocaml,present,numeric,present,default,a,,tagged,7,,,,,,,0.0,1,1.0,0.0,1.0,5.0,,0.0,0.0,0.0,0.0
+20693e3f9fbd4107,cerebras:gpt-oss-120b,dbed7a13fe,p0,1,ocaml,absent,numeric,absent,default,a,,tagged,8,,,,,,,0.0,1,1.0,0.0,1.0,1.0,,0.0,0.0,0.0,0.0
+20a0080e00bb925f,cerebras:gpt-oss-120b,869c4adf71,p0,0,julia,present,numeric,present,default,a,,tagged,5,A,1.0,0.99,"User passes a Julia closure invoked per block via C callback, supporting closures and early exit",1659.0,124.0,1.0,0,,,,,,,,,
+23378c0b827e27f4,cerebras:gpt-oss-120b,869c4adf71,p0,3,julia,present,numeric,present,default,a,,tagged,4,A,1.0,0.98,"Julia function passed via cfunction is invoked per element, can close over state",1308.0,232.0,1.0,0,,,,,,,,,
+25da628c91ec3dbf,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,6,python,present,numeric,present,default,a,,tagged,6,A,1.0,0.98,Binding passes a Python callback per element (or batch) invoked by native iteration,855.0,210.0,1.0,0,,,,,,,,,
+296b519eb24ead3a,cerebras:gpt-oss-120b,a5a6d0dc58,p0,0,ocaml,absent,neutral,absent,offered,a,,tagged,7,,,,,,,,1,0.0,0.0,0.0,0.0,"File ""blocksci.mli"", line 2, characters 0-3:
+2 | let () =
+    ^^^
+Error: Syntax error",0.0,0.0,0.0,0.0
+2badb731c75c085b,cerebras:gpt-oss-120b,dbed7a13fe,p0,2,ocaml,absent,numeric,absent,default,a,,tagged,6,,,,,,,0.0,1,1.0,0.0,1.0,6.0,,0.0,0.0,0.0,0.0
+2ef8c025a48cd985,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,2,python,present,numeric,present,default,a,,tagged,9,A,1.0,0.99,User passes Python functions to for_each/map; host closures executed per element,752.0,122.0,1.0,0,,,,,,,,,
+30e4f4e25efaee57,cerebras:gpt-oss-120b,3d50677ecd,p0,8,ocaml,present,numeric,present,default,a,,tagged,4,,,,,,,0.0,1,1.0,0.0,1.0,7.0,,0.0,0.0,0.0,0.0
+3135d7169d9a8f6f,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,3,python,present,numeric,present,default,a,,tagged,10,A,1.0,0.95,"foreach_block passes a Python callable invoked per element, allowing closures and exceptions",900.0,336.0,1.0,0,,,,,,,,,
+34f823fb62c78dcf,cerebras:gpt-oss-120b,9152ce0f11,p0,6,ocaml,absent,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+3595a62b22584c11,cerebras:gpt-oss-120b,3a7d1d7270,p0,5,ocaml,absent,neutral,absent,default,b,,tagged,8,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+3739f841d3158772,cerebras:gpt-oss-120b,3d50677ecd,p0,0,ocaml,present,numeric,present,default,a,,tagged,4,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+373b547d340a051d,cerebras:gpt-oss-120b,a5a6d0dc58,p0,6,ocaml,absent,neutral,absent,offered,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,9.0,,1.0,1.0,1.0,1.0
+38e62d12077503d1,cerebras:gpt-oss-120b,9152ce0f11,p0,1,ocaml,absent,neutral,absent,default,a,,tagged,4,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+3c75c32ad4d4826f,cerebras:gpt-oss-120b,ed9af7a81e,p0,0,ocaml,present,neutral,absent,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+3ddcbd396b86c692,cerebras:gpt-oss-120b,ed9af7a81e,p0,2,ocaml,present,neutral,absent,default,a,,tagged,4,,,,,,,,1,0.0,0.0,1.0,0.0,"File ""blocksci.mli"", line 16, characters 11-54:
+16 |   data   : (char, Bigarray.c_layout) Bigarray.Array1.t; (* payload *)
+                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+Error: The type constructor ""Bigarray.Array1.t"" expects 3 argument(s),
+       but is here applied to 2 argument(s)",0.0,0.0,0.0,0.0
+3e95ffb6beb55388,cerebras:gpt-oss-120b,3a7d1d7270,p0,2,ocaml,absent,neutral,absent,default,b,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+4152facf51b8426f,cerebras:gpt-oss-120b,869c4adf71,p0,2,julia,present,numeric,present,default,a,,tagged,11,A,0.0,0.95,Uses @cfunction to invoke user Function per element; cannot propagate exceptions for early exit,1030.0,541.0,0.0,0,,,,,,,,,
+43fc848c22c95e6f,cerebras:gpt-oss-120b,91f196e98c,p0,9,python,absent,neutral,absent,default,a,,tagged,10,A,1.0,0.97,Python callback passed to C++ or looped via iterator; arbitrary Python code per element,607.0,227.0,1.0,0,,,,,,,,,
+4443d8f4331f1121,cerebras:gpt-oss-120b,ed9af7a81e,p0,8,ocaml,present,neutral,absent,default,a,,tagged,6,,,,,,,0.0,0,1.0,0.0,0.0,3.0,,0.0,0.0,0.0,0.0
+46945748b1617d68,cerebras:gpt-oss-120b,a5a6d0dc58,p0,5,ocaml,absent,neutral,absent,offered,a,,tagged,8,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+48b4dc385735d5d9,cerebras:gpt-oss-120b,92a45f8a3c,p0,1,lua,present,numeric,present,default,a,,tagged,4,A,1.0,0.99,API passes Lua functions invoked per element; they can capture state and early‑exit,698.0,130.0,1.0,0,,,,,,,,,
+4b34b4bdeb2e36c6,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,7,python,present,numeric,present,default,a,,tagged,6,A,1.0,0.98,"callback is a first‑class Python function invoked per block/batch, can capture state and raise exceptions",1083.0,188.0,1.0,0,,,,,,,,,
+5342b323565022f8,cerebras:gpt-oss-120b,9152ce0f11,p0,2,ocaml,absent,neutral,absent,default,a,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+565e8bffe51e7bea,cerebras:gpt-oss-120b,3a7d1d7270,p0,4,ocaml,absent,neutral,absent,default,b,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+5681dd5c319e5bda,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,1,python,present,numeric,present,default,a,,tagged,6,A,1.0,0.99,"apply/map accept Python callbacks, enabling per‑block closures and early‑exit",742.0,132.0,1.0,0,,,,,,,,,
+56cf93a51bf2df60,cerebras:gpt-oss-120b,3a7d1d7270,p0,3,ocaml,absent,neutral,absent,default,b,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+5834b3f74fb2a318,cerebras:gpt-oss-120b,dbed7a13fe,p0,0,ocaml,absent,numeric,absent,default,a,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,7.0,,1.0,1.0,1.0,1.0
+5c88b0e7593ff014,cerebras:gpt-oss-120b,9152ce0f11,p0,5,ocaml,absent,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+5e0b37d43bf836c4,cerebras:gpt-oss-120b,3a7d1d7270,p0,0,ocaml,absent,neutral,absent,default,b,,tagged,9,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+62caf5c254eba6c2,cerebras:gpt-oss-120b,869c4adf71,p0,1,julia,present,numeric,present,default,a,,tagged,9,A,1.0,0.97,User passes a Julia closure; binding calls it per element via @cfunction,1054.0,469.0,1.0,0,,,,,,,,,
+6425b394cb4e64fb,cerebras:gpt-oss-120b,3d50677ecd,p0,9,ocaml,present,numeric,present,default,a,,tagged,5,,,,,,,0.0,0,1.0,3.0,1.0,4.0,,1.0,1.0,0.0,1.0
+657d0f42f1f5728f,cerebras:gpt-oss-120b,a5a6d0dc58,p0,4,ocaml,absent,neutral,absent,offered,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,6.0,,1.0,1.0,1.0,1.0
+665a1b1bc56a8ce4,cerebras:gpt-oss-120b,3f7735d62d,p0,1,ocaml,absent,neutral,present,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+6901ebdf56bc354d,cerebras:gpt-oss-120b,9152ce0f11,p0,8,ocaml,absent,neutral,absent,default,a,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+69b242aaf7204c0e,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,4,python,present,numeric,present,default,a,,tagged,7,B,0.0,0.4,"Only build script shown; no callable per-element API, likely data description used",794.0,262.0,0.0,1,,,,,,,,,
+6bc97a667eab2573,cerebras:gpt-oss-120b,3f7735d62d,p0,4,ocaml,absent,neutral,present,default,a,,tagged,9,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+6d2d60b9b5bca714,cerebras:gpt-oss-120b,a5a6d0dc58,p0,9,ocaml,absent,neutral,absent,offered,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+74f3a8e0fb735bd7,cerebras:gpt-oss-120b,3d50677ecd,p0,3,ocaml,present,numeric,present,default,a,,tagged,3,,,,,,,0.0,1,1.0,0.0,1.0,8.0,,0.0,0.0,0.0,0.0
+755e38eee370bbf0,cerebras:gpt-oss-120b,92a45f8a3c,p0,7,lua,present,numeric,present,default,a,,tagged,3,A,1.0,1.0,"User supplies Lua function called per element, can capture state and abort",680.0,116.0,1.0,0,,,,,,,,,
+76e0146703feb2c4,cerebras:gpt-oss-120b,a5a6d0dc58,p0,1,ocaml,absent,neutral,absent,offered,a,,tagged,4,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+7d33210e6ab6354f,cerebras:gpt-oss-120b,869c4adf71,p0,7,julia,present,numeric,present,default,a,,tagged,8,A,0.0,0.95,"User supplies a Function via @cfunction; must be concrete, no captured state, so no arbitrary closures",1077.0,364.0,0.0,0,,,,,,,,,
+7fac1cf65f5d6fc8,cerebras:gpt-oss-120b,3f7735d62d,p0,3,ocaml,absent,neutral,present,default,a,,tagged,4,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+80295c6ca4244392,cerebras:gpt-oss-120b,5656c483b6,p0,0,c,present,numeric,present,default,a,,tagged,3,A,1.0,1.0,API passes a per‑block callback invoked for each element,2413.0,624.0,1.0,0,,,,,,,,,
+811ae8c9117c8b86,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,5,python,present,numeric,present,default,a,,tagged,5,A,1.0,0.98,User passes Python callbacks invoked per element/batch,879.0,160.0,1.0,0,,,,,,,,,
+86ba67d050a24a13,cerebras:gpt-oss-120b,3f7735d62d,p0,0,ocaml,absent,neutral,present,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+899c35143b65e968,cerebras:gpt-oss-120b,a5a6d0dc58,p0,2,ocaml,absent,neutral,absent,offered,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+8ba41c8583ac7d54,cerebras:gpt-oss-120b,91f196e98c,p0,4,python,absent,neutral,absent,default,a,,tagged,10,A,1.0,0.99,foreach passes a Python callback; iterator yields objects for arbitrary Python code,683.0,216.0,1.0,0,,,,,,,,,
+8d591f436556478b,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,9,python,present,numeric,present,default,a,,tagged,5,A,1.0,0.97,foreach accepts a Python callable invoked per element,674.0,205.0,1.0,0,,,,,,,,,
+8ef49c0935733bfd,cerebras:gpt-oss-120b,91f196e98c,p0,8,python,absent,neutral,absent,default,a,,tagged,7,A,1.0,0.97,exposes for_each(callback) letting user supply Python function,670.0,250.0,1.0,0,,,,,,,,,
+91658ab74db11147,cerebras:gpt-oss-120b,92a45f8a3c,p0,0,lua,present,numeric,present,default,a,,tagged,4,A,1.0,0.99,"iterate takes a Lua closure invoked per element, allowing stateful user code",694.0,185.0,1.0,0,,,,,,,,,
+91b382eb76014fbc,cerebras:gpt-oss-120b,92a45f8a3c,p0,8,lua,present,numeric,present,default,a,,tagged,5,A,1.0,0.96,"API exposes for_each taking a Lua function; loop body can close over state, call libs, break/raise",613.0,601.0,1.0,0,,,,,,,,,
+923c9283b68bd04d,cerebras:gpt-oss-120b,91f196e98c,p0,0,python,absent,neutral,absent,default,a,,tagged,8,A,1.0,0.99,"for_each takes a Python callable invoked per element, supporting closures and early exit",699.0,153.0,1.0,0,,,,,,,,,
+941d6a479584ec7e,cerebras:gpt-oss-120b,3d50677ecd,p0,5,ocaml,present,numeric,present,default,a,,tagged,7,,,,,,,0.0,1,1.0,0.0,1.0,6.0,,0.0,0.0,0.0,0.0
+96eab7278a1dc728,cerebras:gpt-oss-120b,ed9af7a81e,p0,3,ocaml,present,neutral,absent,default,a,,tagged,3,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+9c15cdffaa5f2709,cerebras:gpt-oss-120b,91f196e98c,p0,2,python,absent,neutral,absent,default,a,,tagged,7,A,1.0,0.99,"for_each accepts a Python callable invoked per frame, supporting closures and early exit",714.0,133.0,1.0,0,,,,,,,,,
+9ceff434a7b7bceb,cerebras:gpt-oss-120b,ed9af7a81e,p0,7,ocaml,present,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+9f63a0d167afcbeb,cerebras:gpt-oss-120b,9152ce0f11,p0,0,ocaml,absent,neutral,absent,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+9f701f98be38cef2,cerebras:gpt-oss-120b,ed9af7a81e,p0,4,ocaml,present,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,6.0,,1.0,1.0,1.0,1.0
+a2f04f01e1d6a309,cerebras:gpt-oss-120b,3d50677ecd,p0,4,ocaml,present,numeric,present,default,a,,tagged,7,,,,,,,0.0,0,1.0,3.0,1.0,7.0,,1.0,1.0,0.0,1.0
+a66e8fce5c62db40,cerebras:gpt-oss-120b,869c4adf71,p0,4,julia,present,numeric,present,default,a,,tagged,5,A,1.0,0.99,"Julia closure passed via @cfunction executed per block; can capture state, early‑exit, call other code.",2145.0,274.0,1.0,0,,,,,,,,,
+a74acec105a5e895,cerebras:gpt-oss-120b,3a7d1d7270,p0,1,ocaml,absent,neutral,absent,default,b,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+a75324ba34fb0c8e,cerebras:gpt-oss-120b,a5a6d0dc58,p0,8,ocaml,absent,neutral,absent,offered,a,,tagged,17,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+a89d4ba335c6fba2,cerebras:gpt-oss-120b,9152ce0f11,p0,7,ocaml,absent,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,1.0,,1.0,1.0,1.0,1.0
+a9fc04a78a8efec2,cerebras:gpt-oss-120b,3f7735d62d,p0,2,ocaml,absent,neutral,present,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+acd16015066b340c,cerebras:gpt-oss-120b,3f7735d62d,p0,7,ocaml,absent,neutral,present,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+af91e7e47686363b,cerebras:gpt-oss-120b,92a45f8a3c,p0,3,lua,present,numeric,present,default,a,,tagged,4,A,1.0,0.99,for_each takes a Lua function callback executed per element,672.0,191.0,1.0,0,,,,,,,,,
+affb84a2884b92de,cerebras:gpt-oss-120b,ed9af7a81e,p0,1,ocaml,present,neutral,absent,default,a,,tagged,8,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+b56e4498d01bef35,cerebras:gpt-oss-120b,3f7735d62d,p0,8,ocaml,absent,neutral,present,default,a,,tagged,8,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+b6eed9a3dae5a98c,cerebras:gpt-oss-120b,5656c483b6,p0,1,c,present,numeric,present,default,a,,tagged,4,A,0.0,0.78,Callback invoked per element; C cannot capture locals like true closures nor throw exceptions,1434.0,527.0,0.0,0,,,,,,,,,
+b85bc66662abc91f,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,0,python,present,numeric,present,default,a,,tagged,7,A,1.0,0.95,"apply/map take Python callables, enabling arbitrary per‑element code with closures",780.0,430.0,1.0,0,,,,,,,,,
+b9f353a4eab8ba49,cerebras:gpt-oss-120b,3d50677ecd,p0,1,ocaml,present,numeric,present,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,10.0,,1.0,1.0,1.0,1.0
+bcba055ae3bbf427,cerebras:gpt-oss-120b,5656c483b6,p0,2,c,present,numeric,present,default,a,,tagged,3,A,0.0,0.99,API uses C function pointer callback per element; no data‑spec or fused kernel; C callbacks lack true closures,2823.0,332.0,0.0,0,,,,,,,,,
+bd3fb9854916c5dd,cerebras:gpt-oss-120b,3f7735d62d,p0,5,ocaml,absent,neutral,present,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+c1a64a8753adb70d,cerebras:gpt-oss-120b,ed9af7a81e,p0,9,ocaml,present,neutral,absent,default,a,,tagged,4,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+c32120c67f967c8e,cerebras:gpt-oss-120b,5656c483b6,p0,6,c,present,numeric,present,default,a,,tagged,5,A,1.0,0.97,User supplies a C function pointer called per element; no data‑spec interpretation nor fused kernel,1807.0,410.0,1.0,0,,,,,,,,,
+c4218649b787cbc4,cerebras:gpt-oss-120b,ed9af7a81e,p0,5,ocaml,present,neutral,absent,default,a,,tagged,6,,,,,,,0.0,1,1.0,0.0,1.0,8.0,,0.0,0.0,0.0,0.0
+c43ce605c360275a,cerebras:gpt-oss-120b,dbed7a13fe,p0,9,ocaml,absent,numeric,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,6.0,,1.0,1.0,1.0,1.0
+c4f7939c53c0a5be,cerebras:gpt-oss-120b,9152ce0f11,p0,4,ocaml,absent,neutral,absent,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+c51730bfd62175d7,cerebras:gpt-oss-120b,91f196e98c,p0,1,python,absent,neutral,absent,default,a,,tagged,7,B,0.0,0.3,Only setup code provided; no API indicating per-element callbacks,699.0,338.0,0.0,1,,,,,,,,,
+ca5fe40ec70f2301,cerebras:gpt-oss-120b,dbed7a13fe,p0,8,ocaml,absent,numeric,absent,default,a,,tagged,5,,,,,,,0.0,1,1.0,0.0,1.0,6.0,,0.0,0.0,0.0,0.0
+ca6675401e7fe72f,cerebras:gpt-oss-120b,9152ce0f11,p0,9,ocaml,absent,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+cb8f6e37c2f8f08c,cerebras:gpt-oss-120b,869c4adf71,p0,6,julia,present,numeric,present,default,a,,tagged,6,A,1.0,0.97,"User supplies Julia function passed as C callback; invoked per element, can capture state",1237.0,222.0,1.0,0,,,,,,,,,
+cd2811aa0c9b422d,cerebras:gpt-oss-120b,3a7d1d7270,p0,9,ocaml,absent,neutral,absent,default,b,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+d3ac10a20b04b60c,cerebras:gpt-oss-120b,91f196e98c,p0,5,python,absent,neutral,absent,default,a,,tagged,8,A,1.0,0.96,User supplies Python callback invoked per element; can capture state and raise exceptions,640.0,168.0,1.0,0,,,,,,,,,
+d40f55ac3e96a883,cerebras:gpt-oss-120b,dbed7a13fe,p0,7,ocaml,absent,numeric,absent,default,a,,tagged,6,,,,,,,1.0,0,1.0,4.0,1.0,7.0,,1.0,1.0,1.0,1.0
+dbbee79cd88e295b,cerebras:gpt-oss-120b,91f196e98c,p0,7,python,absent,neutral,absent,default,a,,tagged,6,A,1.0,0.99,"Provides for_each(callback) invoking Python function per frame, supporting closures and exception control",712.0,190.0,1.0,0,,,,,,,,,
+dc2adadc68083c3b,cerebras:gpt-oss-120b,92a45f8a3c,p0,5,lua,present,numeric,present,default,a,,tagged,5,A,1.0,0.99,"for_each invokes a Lua closure per block, can capture state and early‑exit",736.0,166.0,1.0,0,,,,,,,,,
+df6876cdf1f91b16,cerebras:gpt-oss-120b,869c4adf71,p0,8,julia,present,numeric,present,default,a,,tagged,5,A,1.0,0.99,"foreach_block passes a Julia closure via @cfunction, preserving it for per‑element calls",1388.0,227.0,1.0,0,,,,,,,,,
+e0d0691d19afd1e8,cerebras:gpt-oss-120b,3a7d1d7270,p0,7,ocaml,absent,neutral,absent,default,b,,tagged,9,,,,,,,1.0,0,1.0,4.0,1.0,4.0,,1.0,1.0,1.0,1.0
+e0e136db60fb6784,cerebras:gpt-oss-120b,5656c483b6,p0,7,c,present,numeric,present,default,a,,tagged,4,A,1.0,0.85,"Callback invoked per element; user can pass function + user_data, allowing arbitrary C code and early exit",1620.0,613.0,1.0,0,,,,,,,,,
+e19088936bcfd887,cerebras:gpt-oss-120b,3d50677ecd,p0,7,ocaml,present,numeric,present,default,a,,tagged,5,,,,,,,0.0,1,1.0,0.0,1.0,5.0,,0.0,0.0,0.0,0.0
+e3aefccdb5ab4595,cerebras:gpt-oss-120b,91f196e98c,p0,6,python,absent,neutral,absent,default,a,,tagged,8,A,1.0,0.99,for_each(callback) passes a Python function; iterator yields items for arbitrary Python code,749.0,205.0,1.0,0,,,,,,,,,
+e4e51d570b9748ce,cerebras:gpt-oss-120b,869c4adf71,p0,5,julia,present,numeric,present,default,a,,tagged,8,A,1.0,0.99,User supplies a Julia closure invoked per element via C callback; can capture state and throw.,1043.0,238.0,1.0,0,,,,,,,,,
+e57176c023630e92,cerebras:gpt-oss-120b,91f196e98c,p0,3,python,absent,neutral,absent,default,a,,tagged,8,A,1.0,0.99,"binding passes Python callback invoked per frame; supports closures, state, exceptions",816.0,164.0,1.0,0,,,,,,,,,
+e616757f68dd29f3,cerebras:gpt-oss-120b,5656c483b6,p0,5,c,present,numeric,present,default,a,,tagged,2,A,1.0,0.98,"user passes C function pointer called per element; can use user_data for state, early abort via return",2063.0,380.0,1.0,0,,,,,,,,,
+e63d926fec7512af,cerebras:gpt-oss-120b,92a45f8a3c,p0,9,lua,present,numeric,present,default,a,,tagged,6,A,1.0,0.99,"takes a Lua callback invoked per element, can close over locals and early‑exit",571.0,123.0,1.0,0,,,,,,,,,
+e90bbfeecc1be118,cerebras:gpt-oss-120b,9152ce0f11,p0,3,ocaml,absent,neutral,absent,default,a,,tagged,7,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+ea71bdcd42d0fd0d,cerebras:gpt-oss-120b,3a7d1d7270,p0,8,ocaml,absent,neutral,absent,default,b,,tagged,9,,,,,,,1.0,0,1.0,4.0,1.0,3.0,,1.0,1.0,1.0,1.0
+ec97aba23e5b7b5d,cerebras:gpt-oss-120b,ed9af7a81e,p0,6,ocaml,present,neutral,absent,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,7.0,,1.0,1.0,1.0,1.0
+f05290663ec58f62,cerebras:gpt-oss-120b,92a45f8a3c,p0,4,lua,present,numeric,present,default,a,,tagged,2,A,1.0,0.99,"for_each_block takes a Lua closure invoked per block, supports early‑exit and arbitrary code",564.0,146.0,1.0,0,,,,,,,,,
+f12bc607e3ed2930,cerebras:gpt-oss-120b,4e5a0ba9e1,p0,8,python,present,numeric,present,default,a,,tagged,4,A,1.0,0.99,for_each receives a Python callable that C++ invokes per block,728.0,217.0,1.0,0,,,,,,,,,
+fce55575fcb88040,cerebras:gpt-oss-120b,3f7735d62d,p0,6,ocaml,absent,neutral,present,default,a,,tagged,5,,,,,,,1.0,0,1.0,4.0,1.0,5.0,,1.0,1.0,1.0,1.0
+fd343f74f0f15fbd,cerebras:gpt-oss-120b,dbed7a13fe,p0,6,ocaml,absent,numeric,absent,default,a,,tagged,5,,,,,,,0.0,1,1.0,0.0,1.0,4.0,,0.0,0.0,0.0,0.0
+fee29552528c2034,cerebras:gpt-oss-120b,92a45f8a3c,p0,2,lua,present,numeric,present,default,a,,untagged,1,A,1.0,0.99,"User supplies a Lua function invoked per element, can capture state and abort",3234.0,136.0,1.0,0,,,,,,,,,
+ff16c8089d937616,cerebras:gpt-oss-120b,3d50677ecd,p0,2,ocaml,present,numeric,present,default,a,,tagged,4,,,,,,,0.0,1,1.0,0.0,1.0,7.0,,0.0,0.0,0.0,0.0

@@ -1,0 +1,31 @@
+{
+  "git_commit": "44c17b63f2a9fe40cfd537ef5393a5c50ad5b045",
+  "git_dirty": true,
+  "config_sha256": "b2699d5e6bb20c486830a0dcc272bcc8ea313464908f8773a752ea33e668ca06",
+  "providers": [
+    "cerebras"
+  ],
+  "model_requested": [
+    "gpt-oss-120b"
+  ],
+  "model_served": [
+    "gpt-oss-120b"
+  ],
+  "sampling_params": [
+    {
+      "temperature_sent": true,
+      "temperature": 0.7
+    }
+  ],
+  "seed": 17,
+  "n_completions": 120,
+  "n_ok": 120,
+  "n_error": 0,
+  "raw_archive_sha256": "863b7adeec905627b81f0ccfad561770abb1718194d698b586fa6df809a3a214",
+  "ocaml": "5.3.0",
+  "python": "3.13.7",
+  "python_packages_sha256": "30a0af87289541fd91180eccc2f247c4ff4da6648dfd39b3d12c565f74752dfc",
+  "platform": "Linux-6.17.0-35-generic-x86_64-with-glibc2.42",
+  "config_file": "config.cerebras.yaml",
+  "config_file_sha256": "9e78875b5781c5732de04664af3f0b7a4ee75c96dac2cbbbce2ce911dbc49e06"
+}
