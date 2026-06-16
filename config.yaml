@@ -1,0 +1,54 @@
+# ============================================================================
+#  Closure-bias probe — experiment configuration
+#  Pre-registered design. Edit, then `python run_experiment.py --config config.yaml`.
+# ============================================================================
+
+models:
+  # Set the EXACT API model string(s) you want to probe. Compare >1 if useful.
+  # (As of writing, the Opus API string is "claude-opus-4-8" — confirm before running.)
+  - claude-opus-4-8
+
+api:
+  temperature: 0.7          # nonzero: we want a RATE per cell, not one draw
+  max_tokens: 4000
+  # endpoint + key come from env: ANTHROPIC_API_KEY
+  base_url: https://api.anthropic.com/v1/messages
+  anthropic_version: "2023-06-01"
+
+sampling:
+  n_per_cell: 40            # completions per (cell × paraphrase). >=30; raise for small effects.
+  paraphrases: [p0, p1, p2, p3]   # which template paraphrases to cycle (see prompts.py)
+  seed: 17
+  max_concurrency: 4
+
+# ----------------------------------------------------------------------------
+#  THE CUE GRID
+#  Each factor is toggled one cluster at a time around a byte-identical base.
+#  Primary pre-registered contrasts are WITHIN lang=ocaml across cues.
+# ----------------------------------------------------------------------------
+grid:
+  lang:        [ocaml, python, julia, lua, c]   # python = positive control / ceiling
+  perf:        [absent, present]                 # perf-framing trigger
+  domain:      [numeric, neutral]                # perf-numeric subculture source
+  polars:      [absent, present]                 # most on-the-nose causal probe
+  recognition: [default, offered]                # recognition-vs-generation split
+  placebo:     [a, b]                            # nuisance factor: must have OR ~ 1
+
+# To keep the run tractable, you usually DON'T want the full 5*2*2*2*2*2 = 160
+# cells in one shot. `run_experiment.py --plan core` runs the pre-registered
+# core (defined in prompts.py: PLANS); `--plan full` runs everything.
+default_plan: core
+
+scoring:
+  # OCaml is the automated spine: real compiler = ground truth.
+  ocaml_compiler: ocamlfind        # must be on PATH on the scoring machine
+  ocaml_timeout_s: 20
+  # Cross-language arms have no portable compiler oracle -> LLM judge,
+  # calibrated against the OCaml compiler (Cohen's kappa). See judge.py.
+  judge_model: claude-opus-4-8
+  judge_on_ocaml_too: true         # needed to compute compiler-vs-judge kappa
+
+paths:
+  raw_dir: ./out/raw                # one JSON per completion
+  scored_csv: ./out/scored.csv
+  analysis_dir: ./out/analysis
