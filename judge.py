@@ -52,7 +52,9 @@ def judge_api(code: str, lang: str, model: str) -> dict:
     # No temperature: Opus 4.8/4.7 reject it (see api_client.call_model). The judge
     # leans on a tightly-constrained rubric + minified-JSON output for stability
     # rather than temperature=0.
-    txt, meta = call_model_meta(model=model, system=sys, user=user, max_tokens=300)
+    # max_tokens generous because reasoning models (e.g. gpt-oss) spend tokens on
+    # hidden reasoning BEFORE emitting the minified JSON; 300 would truncate to empty.
+    txt, meta = call_model_meta(model=model, system=sys, user=user, max_tokens=1500)
     usage = {"judge_input_tokens": meta.get("input_tokens"),
              "judge_output_tokens": meta.get("output_tokens")}
     m = _JSON.search(txt)

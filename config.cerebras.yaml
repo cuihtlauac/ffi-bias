@@ -1,0 +1,44 @@
+# ============================================================================
+#  Closure-bias probe — Cerebras (free open-source model) configuration.
+#  Isolated paths (out_cerebras/) so this subject never pools with other runs.
+#  Run:  CEREBRAS_API_KEY=... python run_experiment.py --config config.cerebras.yaml --plan core
+# ============================================================================
+
+models:
+  # `cerebras:` routes to the Cerebras adapter; rest is the exact Cerebras model id.
+  # (If a 400 model_not_found comes back, adjust to the current catalog id.)
+  - cerebras:gpt-oss-120b
+
+api:
+  temperature: 0.7          # open models accept it; >0 keeps per-cell sampling stochastic
+  max_tokens: 6000          # gpt-oss is a reasoning model (reasoning tokens come BEFORE
+                            # content); give room for reasoning + a full .mli. Prompt
+                            # ~400 tok + 6000 < the free-tier 8192 context cap.
+  # endpoint + key come from env: CEREBRAS_API_KEY (override CEREBRAS_BASE_URL if needed)
+
+sampling:
+  n_per_cell: 10
+  paraphrases: [p0]
+  seed: 17
+  max_concurrency: 2        # free tier: 30 RPM / ~60-100K TPM; pace via API_MIN_INTERVAL_S
+
+grid:
+  lang:        [ocaml, python, julia, lua, c]
+  perf:        [absent, present]
+  domain:      [numeric, neutral]
+  polars:      [absent, present]
+  recognition: [default, offered]
+  placebo:     [a, b]
+
+default_plan: core
+
+scoring:
+  ocaml_compiler: ocamlfind
+  ocaml_timeout_s: 20
+  judge_model: cerebras:gpt-oss-120b
+  judge_on_ocaml_too: false   # OCaml truth is the compiler; judge only the non-OCaml arms
+
+paths:
+  raw_dir: ./out_cerebras/raw
+  scored_csv: ./out_cerebras/scored.csv
+  analysis_dir: ./out_cerebras/analysis

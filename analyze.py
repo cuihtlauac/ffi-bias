@@ -128,10 +128,15 @@ def main(cfg, run_id=None):
     ortab = pd.DataFrame()
     glm_txt = ""
     if usable.closure_capable.nunique() > 1 and len(usable) >= 20:
-        res = fit_glm(usable)
-        ortab = odds_ratio_table(res)
-        ortab.to_csv(os.path.join(out, "odds_ratios.csv"), index=False)
-        glm_txt = res.summary().as_text()
+        try:
+            res = fit_glm(usable)
+            ortab = odds_ratio_table(res)
+            ortab.to_csv(os.path.join(out, "odds_ratios.csv"), index=False)
+            glm_txt = res.summary().as_text()
+        except Exception as e:  # e.g. single-paraphrase cluster or perfect separation
+            ortab = pd.DataFrame()
+            glm_txt = (f"GLM skipped: fit failed ({e!r}). "
+                       f"Expected on a single-paraphrase / unbalanced pilot.")
     else:
         glm_txt = "GLM skipped: outcome not variable enough or too few usable OCaml samples."
 

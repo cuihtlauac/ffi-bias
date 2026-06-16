@@ -1,0 +1,43 @@
+# ============================================================================
+#  Closure-bias probe — Together AI (open-source model) configuration.
+#  Isolated paths (out_together/) so this subject never pools with the Gemini run.
+#  Run:  TOGETHER_API_KEY=... python run_experiment.py --config config.together.yaml --plan core
+# ============================================================================
+
+models:
+  # OpenAI-compatible host: the `together:` prefix routes to the Together adapter;
+  # the rest is the exact Together catalog model id (confirm in the catalog — adjust
+  # the suffix, e.g. drop `-Turbo`, if a 400 model_not_found comes back).
+  - together:Qwen/Qwen2.5-Coder-32B-Instruct-Turbo
+
+api:
+  temperature: 0.7          # open models accept it; >0 keeps per-cell sampling stochastic
+  max_tokens: 4000
+  # endpoint + key come from env: TOGETHER_API_KEY (override TOGETHER_BASE_URL if needed)
+
+sampling:
+  n_per_cell: 10
+  paraphrases: [p0]
+  seed: 17
+  max_concurrency: 2        # trial-tier RPM is modest; pace via API_MIN_INTERVAL_S if needed
+
+grid:
+  lang:        [ocaml, python, julia, lua, c]
+  perf:        [absent, present]
+  domain:      [numeric, neutral]
+  polars:      [absent, present]
+  recognition: [default, offered]
+  placebo:     [a, b]
+
+default_plan: core
+
+scoring:
+  ocaml_compiler: ocamlfind
+  ocaml_timeout_s: 20
+  judge_model: together:Qwen/Qwen2.5-Coder-32B-Instruct-Turbo
+  judge_on_ocaml_too: false   # OCaml truth is the compiler; judge only the non-OCaml arms
+
+paths:
+  raw_dir: ./out_together/raw
+  scored_csv: ./out_together/scored.csv
+  analysis_dir: ./out_together/analysis

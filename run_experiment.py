@@ -69,7 +69,19 @@ def run(cfg, plan, dry_run=False, n_per_cell=None):
 
     temp = cfg["api"].get("temperature")   # None/absent -> omitted (required for Opus 4.8/4.7)
     maxtok = cfg["api"]["max_tokens"]
-    todo = [j for j in jobs if not os.path.exists(os.path.join(raw_dir, j["job_id"] + ".json"))]
+    def _needs_run(j):
+        # Run if the file is missing OR a previous attempt recorded an error, so a
+        # second pass recovers jobs lost to transient throttling (429s) while
+        # leaving successful completions untouched (keeps the run idempotent).
+        p = os.path.join(raw_dir, j["job_id"] + ".json")
+        if not os.path.exists(p):
+            return True
+        try:
+            with open(p) as f:
+                return bool(json.load(f).get("error"))
+        except Exception:
+            return True          # unreadable/partial -> redo
+    todo = [j for j in jobs if _needs_run(j)]
     print(f"{len(jobs) - len(todo)} already done; running {len(todo)}")
 
     def work(j):
