@@ -10,7 +10,7 @@ Usage:
   python score.py --config config.yaml
 """
 
-import os, sys, json, glob, argparse, importlib.util
+import os, sys, json, glob, argparse, importlib.util, shutil
 import pandas as pd
 import yaml
 
@@ -90,7 +90,7 @@ def score_one(rec, cfg):
     return row
 
 
-def main(cfg, run_id=None):
+def main(cfg, run_id=None, freeze_raw=False):
     raw_dir = cfg["paths"]["raw_dir"]
     out_dir = os.path.dirname(raw_dir.rstrip("/")) or "."
     # --run-id => immutable run-scoped record; otherwise the ephemeral out/ scratch.
@@ -118,6 +118,13 @@ def main(cfg, run_id=None):
     print(f"wrote {scored_csv}  ({len(df)} rows)")
     if run_dir:
         _write_manifest(run_dir, out_dir)   # provenance lives with the frozen results
+        if freeze_raw:
+            # Copy the raw completions in so the record is self-contained; the
+            # manifest's raw_archive_sha256 (hashed over the same files) verifies them.
+            frozen = os.path.join(run_dir, "raw")
+            _no_clobber(frozen)
+            shutil.copytree(raw_dir, frozen)
+            print(f"froze {len(files)} raw completions -> {frozen}")
     # quick console summary
     oc = df[df.lang == "ocaml"]
     if len(oc):
@@ -135,5 +142,10 @@ if __name__ == "__main__":
     ap.add_argument("--run-id", default=None,
                     help="record into lab/results/<run-id>/ (immutable) instead of out/; "
                          "also writes manifest.json. Omit for the ephemeral out/ scratch.")
+    ap.add_argument("--freeze-raw", action="store_true",
+                    help="also copy out/raw into lab/results/<run-id>/raw/ for a "
+                         "self-contained record (requires --run-id).")
     args = ap.parse_args()
-    main(load_config(args.config), run_id=args.run_id)
+    if args.freeze_raw and not args.run_id:
+        ap.error("--freeze-raw requires --run-id (nothing to freeze into without a run dir).")
+    main(load_config(args.config), run_id=args.run_id, freeze_raw=args.freeze_raw)
